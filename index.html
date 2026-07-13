@@ -78,26 +78,81 @@
   <span class="name">DANIELDAVEY.CO.UK</span>
 
   <div class="gallery">
-    <!-- row 1: L(4) + M(3) + S(2) + M(3) = 12 -->
-    <img class="l" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_880.jpg" alt="">
-    <img class="m" src="Personal_Images/lanzarote-4.jpg" alt="">
-    <img class="s" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_55.jpg" alt="">
-    <img class="m" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_884.jpg" alt="">
-
-    <!-- row 2: S(2) + L(4) + M(3) + M(3) = 12 -->
-    <img class="s" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_112.jpg" alt="">
-    <img class="l" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_680.jpg" alt="">
-    <img class="m" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_61.jpg" alt="">
-    <img class="m" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_908.jpg" alt="">
-
-    <!-- row 3: M(3) + S(2) + M(3) + L(4) = 12 -->
-    <img class="m" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_838.jpg" alt="">
-    <img class="s" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_471.jpg" alt="">
-    <img class="m" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1549.jpg" alt="">
-    <img class="l" src="Personal_Images/23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_96.jpg" alt="">
+    <!-- row 1: L + M + S + M -->
+    <img class="l" alt=""><img class="m" alt=""><img class="s" alt=""><img class="m" alt="">
+    <!-- row 2: S + L + M + M -->
+    <img class="s" alt=""><img class="l" alt=""><img class="m" alt=""><img class="m" alt="">
+    <!-- row 3: M + S + M + L -->
+    <img class="m" alt=""><img class="s" alt=""><img class="m" alt=""><img class="l" alt="">
   </div>
 
   <script>
+    const allImages = [
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_112.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1441.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_145.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1464.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1465.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1479.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1513.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1549.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1577.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1594.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1595.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_1597.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_161.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_176.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_181.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_205.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_227.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_233.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_286.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_348.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_386.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_426.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_455.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_471.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_495.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_537.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_538.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_55.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_566.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_578.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_61.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_619.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_630.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_680.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_684.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_832.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_838.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_880.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_884.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_888.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_908.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_925.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_946.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_949.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_95.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_954.jpg',
+      '23fe28a9-1ac2-4167-9145-c1f929b9d991-1_all_96.jpg',
+      'image.jpg',
+      'image2.jpg',
+      'lanzarote-4.jpg'
+    ];
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    const picked = shuffle([...allImages]).slice(0, 12);
+    document.querySelectorAll('.gallery img').forEach((img, i) => {
+      img.src = 'Personal_Images/' + picked[i];
+    });
+
     const canvas = document.getElementById('grain');
     const ctx = canvas.getContext('2d');
 
