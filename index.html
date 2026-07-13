@@ -49,6 +49,7 @@
       position: relative;
       perspective: var(--perspective);
       cursor: pointer;
+      clip-path: inset(0);
     }
 
     .cell.is-spinning {
@@ -74,11 +75,11 @@
       clip-path: inset(0);
     }
 
-    .face.front  { transform: translateZ(var(--hh)) scale(var(--face-scale)); }
-    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)) scale(var(--face-scale)); }
-    /* edge faces: scaleX matches face width, scaleY matches box depth */
-    .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scale(var(--face-scale), var(--depth-scale)); background: #0a0a0a; }
-    .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scale(var(--face-scale), var(--depth-scale)); background: #0a0a0a; }
+    .face.front  { transform: translateZ(var(--hh)); }
+    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)); }
+    /* edge faces: scaleY to match box depth; full width matches un-scaled faces */
+    .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
+    .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
 
     .face img {
       width: 100%;
@@ -248,11 +249,8 @@
         // offset perspective-origin so all cells share the same vanishing point (screen centre)
         const rect = cell.getBoundingClientRect();
         cell.style.perspectiveOrigin = `${cx - rect.left}px ${cy - rect.top}px`;
-        // scale counteracts perspective magnification so face appears exactly cell-sized
-        const s = (p - hh) / p;
-        cell.style.setProperty('--face-scale', s.toFixed(6));
-        // edge panels sit at the scaled face's physical edges (s*h/2), spanning z ±hh
-        cell.style.setProperty('--hh-edge', (s * h / 2) + 'px');
+        // edge panels at cell edge (h/2), depth-scaled to span ±hh
+        cell.style.setProperty('--hh-edge', (h / 2) + 'px');
         cell.style.setProperty('--depth-scale', (2 * hh / h).toFixed(6));
       });
     }
