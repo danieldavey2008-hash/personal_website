@@ -58,7 +58,7 @@
     }
 
     .flipper.flipped {
-      transform: rotateY(180deg);
+      transform: rotateX(-180deg);
     }
 
     .face {
@@ -68,9 +68,10 @@
       overflow: hidden;
     }
 
-    .face.back {
-      transform: rotateY(180deg);
-    }
+    .face.front { transform: translateZ(var(--hh)); }
+    .face.back  { transform: rotateX(180deg) translateZ(var(--hh)); }
+    .face.top   { transform: rotateX(-90deg) translateZ(var(--hh)); background: #0a0a0a; }
+    .face.bottom{ transform: rotateX( 90deg) translateZ(var(--hh)); background: #0a0a0a; }
 
     .face img {
       width: 100%;
@@ -136,11 +137,11 @@
 
   <div class="gallery">
     <!-- row 1: L + M + S + M -->
-    <div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div>
+    <div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div>
     <!-- row 2: S + L + M + M -->
-    <div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div>
+    <div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div>
     <!-- row 3: M + S + M + L -->
-    <div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div><div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div></div></div>
+    <div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell s"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell m"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div><div class="cell l"><div class="flipper"><div class="face front"><img alt=""></div><div class="face back"><img alt=""></div><div class="face top"></div><div class="face bottom"></div></div></div>
   </div>
 
   <script>
@@ -226,6 +227,16 @@
       cell.dataset.name = displayName(picked[i]);
       cell.dataset.flipped = '0';
     });
+
+    function updateDepth() {
+      cells.forEach(cell => {
+        const h = cell.offsetHeight;
+        cell.style.setProperty('--hh', (h / 2) + 'px');
+        cell.style.perspective = (h * 3) + 'px';
+      });
+    }
+    window.addEventListener('resize', updateDepth);
+    updateDepth();
 
     function spinCell() {
       const available = cells.filter(c => !spinning.has(c));
