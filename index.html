@@ -47,8 +47,11 @@
 
     .cell {
       position: relative;
-      overflow: hidden;
       perspective: var(--perspective);
+    }
+
+    .cell.is-spinning {
+      z-index: 10;
     }
 
     .flipper {
@@ -255,6 +258,7 @@
       const img = nextImage();
 
       spinning.add(cell);
+      cell.classList.add('is-spinning');
 
       if (!isFlipped) {
         cell.querySelector('.face.back img').src = 'Personal_Images/' + img;
@@ -267,7 +271,10 @@
       }
 
       cell.dataset.name = displayName(img);
-      setTimeout(() => spinning.delete(cell), 1200);
+      setTimeout(() => {
+        spinning.delete(cell);
+        cell.classList.remove('is-spinning');
+      }, 1200);
     }
 
     setInterval(spinCell, 5000);
