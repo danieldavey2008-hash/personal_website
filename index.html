@@ -45,7 +45,12 @@
       height: 100vh;
     }
 
-    .gallery img {
+    .cell {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cell img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -54,8 +59,26 @@
       transition: filter 0.4s ease;
     }
 
-    .gallery img:hover {
+    .cell:hover img {
       filter: grayscale(1) brightness(0.87);
+    }
+
+    .cell::after {
+      content: attr(data-name);
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .cell:hover::after {
+      opacity: 1;
     }
 
     .s { grid-column: span 2; }
@@ -79,11 +102,11 @@
 
   <div class="gallery">
     <!-- row 1: L + M + S + M -->
-    <img class="l" alt=""><img class="m" alt=""><img class="s" alt=""><img class="m" alt="">
+    <div class="cell l"><img alt=""></div><div class="cell m"><img alt=""></div><div class="cell s"><img alt=""></div><div class="cell m"><img alt=""></div>
     <!-- row 2: S + L + M + M -->
-    <img class="s" alt=""><img class="l" alt=""><img class="m" alt=""><img class="m" alt="">
+    <div class="cell s"><img alt=""></div><div class="cell l"><img alt=""></div><div class="cell m"><img alt=""></div><div class="cell m"><img alt=""></div>
     <!-- row 3: M + S + M + L -->
-    <img class="m" alt=""><img class="s" alt=""><img class="m" alt=""><img class="l" alt="">
+    <div class="cell m"><img alt=""></div><div class="cell s"><img alt=""></div><div class="cell m"><img alt=""></div><div class="cell l"><img alt=""></div>
   </div>
 
   <script>
@@ -147,8 +170,9 @@
     }
 
     const picked = shuffle([...allImages]).slice(0, 12);
-    document.querySelectorAll('.gallery img').forEach((img, i) => {
-      img.src = 'Personal_Images/' + picked[i];
+    document.querySelectorAll('.gallery .cell').forEach((cell, i) => {
+      cell.querySelector('img').src = 'Personal_Images/' + picked[i];
+      cell.dataset.name = picked[i];
     });
 
     const canvas = document.getElementById('grain');
