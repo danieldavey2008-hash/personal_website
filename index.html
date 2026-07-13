@@ -85,6 +85,17 @@
     .m { grid-column: span 3; }
     .l { grid-column: span 4; }
 
+    @media (max-width: 768px) {
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: none;
+        grid-auto-rows: 50vw;
+        height: auto;
+      }
+
+      .s, .m, .l { grid-column: span 1; }
+    }
+
     #grain {
       position: fixed;
       top: 0;
