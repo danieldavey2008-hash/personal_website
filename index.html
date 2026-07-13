@@ -36,6 +36,11 @@
       background: #000;
     }
 
+    @keyframes focusIn {
+      from { filter: blur(18px); opacity: 0; }
+      to   { filter: blur(0px);  opacity: 1; }
+    }
+
     .gallery {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -43,6 +48,7 @@
       gap: 0;
       width: 100vw;
       height: 100vh;
+      animation: focusIn 1.4s ease-out forwards;
     }
 
     .cell {
