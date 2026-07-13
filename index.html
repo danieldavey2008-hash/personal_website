@@ -303,16 +303,15 @@
     }
 
     function finishWave() {
-      waveSnap.forEach(({ cell, preName }) => {
-        cell.dataset.name = preName;
-        cleanupWaveFace(cell);
-      });
+      waveSnap.forEach(({ cell }) => cleanupWaveFace(cell));
       waveSnap = null; wavePhase = 0; waveActive = false;
       autoSpin = setInterval(spinCell, 5000);
     }
 
     function startFlipBack() {
       wavePhase = 3;
+      // Restore individual titles immediately as flip-back begins
+      waveSnap.forEach(({ cell, preName }) => cell.dataset.name = preName);
       waveSnap.forEach(({ cell, preFlipped }, i) => {
         setTimeout(() => {
           cell.classList.add('is-spinning');
