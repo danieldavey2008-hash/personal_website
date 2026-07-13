@@ -237,12 +237,17 @@
     });
 
     function updateDepth() {
+      const cx = window.innerWidth  / 2;
+      const cy = window.innerHeight / 2;
       cells.forEach(cell => {
         const h = cell.offsetHeight;
         const hh = h / 6;
         const p = h * 3;
         cell.style.setProperty('--hh', hh + 'px');
         cell.style.setProperty('--perspective', p + 'px');
+        // offset perspective-origin so all cells share the same vanishing point (screen centre)
+        const rect = cell.getBoundingClientRect();
+        cell.style.perspectiveOrigin = `${cx - rect.left}px ${cy - rect.top}px`;
         // scale counteracts perspective magnification so face appears exactly cell-sized
         const s = (p - hh) / p;
         cell.style.setProperty('--face-scale', s.toFixed(6));
