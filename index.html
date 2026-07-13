@@ -70,6 +70,7 @@
       inset: 0;
       backface-visibility: hidden;
       overflow: hidden;
+      clip-path: inset(0);
     }
 
     /* scale compensates for perspective magnification so face appears exactly cell-sized */
@@ -240,10 +241,10 @@
         const p = h * 3;
         cell.style.setProperty('--hh', hh + 'px');
         cell.style.setProperty('--perspective', p + 'px');
-        // counteract perspective magnification: face at +hh appears p/(p-hh) larger,
-        // face at -hh appears p/(p+hh) smaller — scale each back to 1:1
-        cell.style.setProperty('--front-scale', ((p - hh) / p).toFixed(6));
-        cell.style.setProperty('--back-scale',  ((p + hh) / p).toFixed(6));
+        // both faces are at +hh when visible, so both need the same scale to cancel perspective
+        const s = ((p - hh) / p).toFixed(6);
+        cell.style.setProperty('--front-scale', s);
+        cell.style.setProperty('--back-scale',  s);
       });
     }
     window.addEventListener('resize', updateDepth);
