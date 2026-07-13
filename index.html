@@ -48,6 +48,7 @@
     .cell {
       position: relative;
       perspective: var(--perspective);
+      cursor: pointer;
     }
 
     .cell.is-spinning {
@@ -227,6 +228,7 @@
 
     const cells = Array.from(document.querySelectorAll('.gallery .cell'));
     const spinning = new Set();
+    let waveActive = false;
 
     cells.forEach((cell, i) => {
       cell.querySelector('.face.front img').src = 'Personal_Images/' + picked[i];
@@ -253,6 +255,7 @@
     updateDepth();
 
     function spinCell() {
+      if (waveActive) return;
       const available = cells.filter(c => !spinning.has(c));
       if (!available.length) return;
       const cell = available[Math.floor(Math.random() * available.length)];
@@ -280,7 +283,84 @@
       }, 2300);
     }
 
-    setInterval(spinCell, 5000);
+    let autoSpin = setInterval(spinCell, 5000);
+
+    const WAVE_STEP = 100;   // ms delay between each cell in the wave
+    const FLIP_DUR  = 2300;  // must match CSS transition + buffer
+    const HOLD_DUR  = 5000;  // how long the mosaic is held before flipping back
+
+    function triggerWave(clickedCell) {
+      if (waveActive) return;
+      waveActive = true;
+      clearInterval(autoSpin);
+
+      // Capture the image currently visible in the clicked cell
+      const isFlipped = clickedCell.dataset.flipped === '1';
+      const srcImg = clickedCell.querySelector(isFlipped ? '.face.back img' : '.face.front img');
+      const imageSrc = srcImg.src;
+
+      const gallery = document.querySelector('.gallery');
+      const gr = gallery.getBoundingClientRect();
+
+      // Snapshot positions and flip-state before any animation begins
+      const snap = cells.map(cell => ({
+        cell,
+        rect: cell.getBoundingClientRect(),
+        preFlipped: cell.dataset.flipped
+      }));
+
+      // --- Phase 1: wave forward ---
+      snap.forEach(({ cell, rect, preFlipped }, i) => {
+        const hiddenSel = preFlipped === '1' ? '.face.front' : '.face.back';
+        const face = cell.querySelector(hiddenSel);
+
+        // Paint the correct slice of the clicked image onto the hidden face
+        face.style.backgroundImage    = `url('${imageSrc}')`;
+        face.style.backgroundSize     = `${gr.width}px ${gr.height}px`;
+        face.style.backgroundPosition = `-${rect.left - gr.left}px -${rect.top - gr.top}px`;
+        const fi = face.querySelector('img');
+        if (fi) fi.style.opacity = '0';
+
+        setTimeout(() => {
+          cell.classList.add('is-spinning');
+          const flipper = cell.querySelector('.flipper');
+          if (preFlipped === '0') { flipper.classList.add('flipped');    cell.dataset.flipped = '1'; }
+          else                    { flipper.classList.remove('flipped'); cell.dataset.flipped = '0'; }
+          setTimeout(() => cell.classList.remove('is-spinning'), FLIP_DUR);
+        }, i * WAVE_STEP);
+      });
+
+      // --- Phase 2: wave back after last cell has finished + hold ---
+      const flipBackAt = (snap.length - 1) * WAVE_STEP + FLIP_DUR + HOLD_DUR;
+      setTimeout(() => {
+        snap.forEach(({ cell, preFlipped }, i) => {
+          setTimeout(() => {
+            cell.classList.add('is-spinning');
+            const flipper = cell.querySelector('.flipper');
+            if (preFlipped === '0') { flipper.classList.remove('flipped'); cell.dataset.flipped = '0'; }
+            else                    { flipper.classList.add('flipped');    cell.dataset.flipped = '1'; }
+            setTimeout(() => cell.classList.remove('is-spinning'), FLIP_DUR);
+          }, i * WAVE_STEP);
+        });
+
+        // Clean up and resume auto-spin once the flip-back wave finishes
+        setTimeout(() => {
+          cells.forEach(cell => {
+            ['front', 'back'].forEach(side => {
+              const face = cell.querySelector(`.face.${side}`);
+              face.style.backgroundImage = face.style.backgroundSize = face.style.backgroundPosition = '';
+              const fi = face.querySelector('img');
+              if (fi) fi.style.opacity = '';
+            });
+          });
+          waveActive = false;
+          autoSpin = setInterval(spinCell, 5000);
+        }, (snap.length - 1) * WAVE_STEP + FLIP_DUR + 100);
+
+      }, flipBackAt);
+    }
+
+    cells.forEach(cell => cell.addEventListener('click', () => triggerWave(cell)));
 
     const canvas = document.getElementById('grain');
     const ctx = canvas.getContext('2d');
