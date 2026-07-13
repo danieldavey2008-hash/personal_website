@@ -367,13 +367,22 @@
         cell.querySelectorAll('.face.front .label, .face.back .label').forEach(l => l.textContent = mosaicName);
       });
 
+      // Compute cover-fit dimensions so the image isn't distorted
+      const imgW   = srcImg.naturalWidth  || gr.width;
+      const imgH   = srcImg.naturalHeight || gr.height;
+      const scale  = Math.max(gr.width / imgW, gr.height / imgH);
+      const coverW = imgW * scale;
+      const coverH = imgH * scale;
+      const offX   = (gr.width  - coverW) / 2;
+      const offY   = (gr.height - coverH) / 2;
+
       // Phase 1: wave forward
       waveSnap.forEach(({ cell, rect, preFlipped }, i) => {
         const hiddenSel = preFlipped === '1' ? '.face.front' : '.face.back';
         const face      = cell.querySelector(hiddenSel);
         face.style.backgroundImage    = `url('${imageSrc}')`;
-        face.style.backgroundSize     = `${gr.width}px ${gr.height}px`;
-        face.style.backgroundPosition = `-${rect.left - gr.left}px -${rect.top - gr.top}px`;
+        face.style.backgroundSize     = `${coverW}px ${coverH}px`;
+        face.style.backgroundPosition = `${offX - (rect.left - gr.left)}px ${offY - (rect.top - gr.top)}px`;
         const fi = face.querySelector('img');
         if (fi) fi.style.opacity = '0';
 
