@@ -73,9 +73,8 @@
       clip-path: inset(0);
     }
 
-    /* no scale on front/back — faces stay full cell size so edges align exactly with edge panels */
-    .face.front  { transform: translateZ(var(--hh)); }
-    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)); }
+    .face.front  { transform: translateZ(var(--hh)) scale(var(--face-scale)); }
+    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)) scale(var(--face-scale)); }
     /* edge faces: translateZ to cell edge (--hh-edge), scaleY to match box depth (--depth-scale) */
     .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
     .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
@@ -242,9 +241,12 @@
         const p = h * 3;
         cell.style.setProperty('--hh', hh + 'px');
         cell.style.setProperty('--perspective', p + 'px');
-        // edge faces: always positioned at cell edge (h/2) but depth-scaled to match box depth
-        cell.style.setProperty('--hh-edge', (h / 2) + 'px');
-        cell.style.setProperty('--depth-scale', (hh / (h / 2)).toFixed(6));
+        // scale counteracts perspective magnification so face appears exactly cell-sized
+        const s = (p - hh) / p;
+        cell.style.setProperty('--face-scale', s.toFixed(6));
+        // edge panels sit at the scaled face's physical edges (s*h/2), spanning z ±hh
+        cell.style.setProperty('--hh-edge', (s * h / 2) + 'px');
+        cell.style.setProperty('--depth-scale', (2 * hh / h).toFixed(6));
       });
     }
     window.addEventListener('resize', updateDepth);
