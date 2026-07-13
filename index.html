@@ -73,9 +73,9 @@
       clip-path: inset(0);
     }
 
-    /* scale compensates for perspective magnification so face appears exactly cell-sized */
-    .face.front  { transform: translateZ(var(--hh)) scale(var(--front-scale)); }
-    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)) scale(var(--back-scale)); }
+    /* no scale on front/back — faces stay full cell size so edges align exactly with edge panels */
+    .face.front  { transform: translateZ(var(--hh)); }
+    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)); }
     /* edge faces: translateZ to cell edge (--hh-edge), scaleY to match box depth (--depth-scale) */
     .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
     .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
@@ -242,10 +242,6 @@
         const p = h * 3;
         cell.style.setProperty('--hh', hh + 'px');
         cell.style.setProperty('--perspective', p + 'px');
-        // both faces are at +hh when visible, so both need the same scale to cancel perspective
-        const s = ((p - hh) / p).toFixed(6);
-        cell.style.setProperty('--front-scale', s);
-        cell.style.setProperty('--back-scale',  s);
         // edge faces: always positioned at cell edge (h/2) but depth-scaled to match box depth
         cell.style.setProperty('--hh-edge', (h / 2) + 'px');
         cell.style.setProperty('--depth-scale', (hh / (h / 2)).toFixed(6));
