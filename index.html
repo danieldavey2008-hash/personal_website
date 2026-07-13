@@ -47,7 +47,7 @@
 
     .cell {
       position: relative;
-      perspective: 1000px;
+      overflow: hidden;
     }
 
     .flipper {
@@ -58,7 +58,11 @@
     }
 
     .flipper.flipped {
-      transform: rotateX(-180deg);
+      transform: perspective(var(--perspective)) rotateX(-180deg);
+    }
+
+    .flipper:not(.flipped) {
+      transform: perspective(var(--perspective)) rotateX(0deg);
     }
 
     .face {
@@ -232,7 +236,7 @@
       cells.forEach(cell => {
         const h = cell.offsetHeight;
         cell.style.setProperty('--hh', (h / 2) + 'px');
-        cell.style.perspective = (h * 3) + 'px';
+        cell.style.setProperty('--perspective', (h * 3) + 'px');
       });
     }
     window.addEventListener('resize', updateDepth);
