@@ -175,7 +175,7 @@
     const picked = shuffle([...allImages]).slice(0, 12);
     document.querySelectorAll('.gallery .cell').forEach((cell, i) => {
       cell.querySelector('img').src = 'Personal_Images/' + picked[i];
-      cell.dataset.name = picked[i].replace(/\.[^.]+$/, '').replace(/\s*\(\d+\)$/, '').replace(/ in /g, ', ').trim();
+      cell.dataset.name = picked[i].replace(/\.[^.]+$/, '').replace(/\s*\(\d+\)$/, '').replace(/ in /g, ', ').replace(/ near the Korean Demilitarized Zone \(DMZ\)/g, '').trim();
     });
 
     const canvas = document.getElementById('grain');
