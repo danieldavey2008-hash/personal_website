@@ -48,6 +48,7 @@
     .cell {
       position: relative;
       overflow: hidden;
+      perspective: var(--perspective);
     }
 
     .flipper {
@@ -58,11 +59,7 @@
     }
 
     .flipper.flipped {
-      transform: perspective(var(--perspective)) rotateX(-180deg);
-    }
-
-    .flipper:not(.flipped) {
-      transform: perspective(var(--perspective)) rotateX(0deg);
+      transform: rotateX(-180deg);
     }
 
     .face {
@@ -72,10 +69,11 @@
       overflow: hidden;
     }
 
-    .face.front { transform: translateZ(var(--hh)); }
-    .face.back  { transform: rotateX(180deg) translateZ(var(--hh)); }
-    .face.top   { transform: rotateX(-90deg) translateZ(var(--hh)); background: #0a0a0a; }
-    .face.bottom{ transform: rotateX( 90deg) translateZ(var(--hh)); background: #0a0a0a; }
+    /* scale compensates for perspective magnification so face appears exactly cell-sized */
+    .face.front  { transform: translateZ(var(--hh)) scale(var(--front-scale)); }
+    .face.back   { transform: rotateX(180deg) translateZ(var(--hh)) scale(var(--back-scale)); }
+    .face.top    { transform: rotateX(-90deg) translateZ(var(--hh)); background: #0a0a0a; }
+    .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh)); background: #0a0a0a; }
 
     .face img {
       width: 100%;
@@ -235,8 +233,14 @@
     function updateDepth() {
       cells.forEach(cell => {
         const h = cell.offsetHeight;
-        cell.style.setProperty('--hh', (h / 2) + 'px');
-        cell.style.setProperty('--perspective', (h * 3) + 'px');
+        const hh = h / 2;
+        const p = h * 3;
+        cell.style.setProperty('--hh', hh + 'px');
+        cell.style.setProperty('--perspective', p + 'px');
+        // counteract perspective magnification: face at +hh appears p/(p-hh) larger,
+        // face at -hh appears p/(p+hh) smaller — scale each back to 1:1
+        cell.style.setProperty('--front-scale', ((p - hh) / p).toFixed(6));
+        cell.style.setProperty('--back-scale',  ((p + hh) / p).toFixed(6));
       });
     }
     window.addEventListener('resize', updateDepth);
