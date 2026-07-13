@@ -75,9 +75,9 @@
 
     .face.front  { transform: translateZ(var(--hh)) scale(var(--face-scale)); }
     .face.back   { transform: rotateX(180deg) translateZ(var(--hh)) scale(var(--face-scale)); }
-    /* edge faces: translateZ to cell edge (--hh-edge), scaleY to match box depth (--depth-scale) */
-    .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
-    .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scaleY(var(--depth-scale)); background: #0a0a0a; }
+    /* edge faces: scaleX matches face width, scaleY matches box depth */
+    .face.top    { transform: rotateX(-90deg) translateZ(var(--hh-edge)) scale(var(--face-scale), var(--depth-scale)); background: #0a0a0a; }
+    .face.bottom { transform: rotateX( 90deg) translateZ(var(--hh-edge)) scale(var(--face-scale), var(--depth-scale)); background: #0a0a0a; }
 
     .face img {
       width: 100%;
